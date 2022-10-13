@@ -1,0 +1,91 @@
+openapi: 3.0.0
+
+info:
+  title: Test Foundarium
+  description: |-
+    API для управления списком поездок.
+    
+    Требования к API:
+      - Дан список автомобилей.
+      - Дан список пользователей.
+      - В один момент времени один пользователь может управлять только одним автомобилем.
+      - В один момент времени одним автомобилем может управлять только один пользователь.
+        
+  version: 0.0.1
+
+servers:
+  - url: http://test.foundarium/api/driving
+    description: Localhost
+
+paths:
+  /create:
+    post:
+      summary: Создание поездки.
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                car_id:
+                  type: integer
+                driver_id:
+                  type: integer
+              required:
+                - car_id
+                - driver_id
+      responses: 
+        '200':
+          description: Не удалось создать поездку.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Автомобиль уже используется.
+        '201':
+          description: Поездка успешно создана.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  driving_number:
+                    type: integer
+                    example: 21
+                    
+  /complete/{driving_id}:
+    put:
+      summary: Завершение поездки.
+      parameters:
+        - name: driving_id
+          in: path
+          required: true
+          description: Идентификатор созданной поездки.
+          schema:
+            type: integer
+            minimum: 1
+      responses: 
+        '200':
+          description: Изменение поездки запрещено.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Поездка уже завершена.
+        '202':
+          description: Поездка успешно завершена.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Поездка завершена.
