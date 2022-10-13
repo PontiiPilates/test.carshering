@@ -10,4 +10,6 @@ class Car extends Model
     use HasFactory;
 
     protected $table = 'list_cars';
+
+    protected $fillable = ['status'];
 }

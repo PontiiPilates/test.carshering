@@ -16,7 +16,7 @@ class CreateDriversTable extends Migration
         Schema::create('list_drivers', function (Blueprint $table) {
             $table->id();
             $table->char('name', 64)->comment('Данные о водителе');
-            $table->integer('status')->default(0)->comment('Статус: 0 - водитель свободен / 1 - водитель управляет автомобилем');
+            $table->integer('status')->default(0)->comment('Статус: 0 - не управляет / 1 - управляет');
             $table->timestamps();
         });
     }

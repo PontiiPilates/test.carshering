@@ -17,7 +17,7 @@ class CreateDrivingsTable extends Migration
             $table->id();
             $table->integer('car_id')->default(0)->comment('Идентификатор автомобиля');
             $table->integer('driver_id')->default(0)->comment('Идентификатор водителя');
-            $table->integer('status')->default(0)->comment('Статус поездки: 0 - поездка продолжается / 1 - поездка завершена');
+            $table->integer('status')->default(0)->comment('Статус: 0 - продолжается / 1 - завершена');
             $table->timestamps();
         });
     }

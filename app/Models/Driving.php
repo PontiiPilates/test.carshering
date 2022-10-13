@@ -10,4 +10,6 @@ class Driving extends Model
     use HasFactory;
 
     protected $table = 'list_drivings';
+
+    protected $fillable = ['car_id', 'driver_id', 'status'];
 }

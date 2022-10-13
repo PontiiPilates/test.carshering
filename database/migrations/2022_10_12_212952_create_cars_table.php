@@ -16,7 +16,7 @@ class CreateCarsTable extends Migration
         Schema::create('list_cars', function (Blueprint $table) {
             $table->id();
             $table->char('name', 32)->comment('Марка автомобиля');
-            $table->integer('status')->default(0)->comment('Статус: 0 - автомобиль свободен / 1 - автомобиль занят');
+            $table->integer('status')->default(0)->comment('Статус: 0 - свободен / 1 - занят');
             $table->timestamps();
         });
     }

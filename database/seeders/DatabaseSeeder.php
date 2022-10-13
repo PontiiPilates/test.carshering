@@ -4,6 +4,9 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 
+use App\Models\Car;
+use App\Models\Driver;
+
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -13,6 +16,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // User::factory(10)->create();
+        Car::factory(10)->create();
+        Driver::factory(10)->create();
     }
 }

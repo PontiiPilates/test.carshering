@@ -10,4 +10,6 @@ class Driver extends Model
     use HasFactory;
 
     protected $table = 'list_drivers';
+
+    protected $fillable = ['status'];
 }
