@@ -7,12 +7,14 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 class CarFactory extends Factory
 {
     /**
-     * Define the model's default state.
+     * Данные для наполнения таблицы list_cars
      *
      * @return array
      */
+
     public function definition()
     {
+
         return [
             'name' => $this->faker->randomElement([
                 'Koenigseqq Gemera',
@@ -28,5 +30,7 @@ class CarFactory extends Factory
             ]),
             'status' => $this->faker->numberBetween(0, 1)
         ];
+
     }
+
 }

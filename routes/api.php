@@ -20,8 +20,11 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/lists', [DrivingController::class, 'getLists']);
+// получение имеющихся данных
+Route::get('/drivings', [DrivingController::class, 'getDrivings']);
 
-Route::post('/begin', [DrivingController::class, 'drivingBegin']);
+// создание новой поездки
+Route::post('/driving/create', [DrivingController::class, 'drivingCreate']);
 
-Route::put('/complete/{driving_id}', [DrivingController::class, 'drivingComplete']);
+// завершение поездки
+Route::put('/driving/complete/{driving_id}', [DrivingController::class, 'drivingComplete']);

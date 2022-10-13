@@ -10,42 +10,16 @@ use App\Models\Driving;
 
 class DrivingController extends Controller
 {
-    /**
-     * Просто для просмотра и отладки
-     */
-
-    public function getLists()
-    {
-
-        // получение свободных автомобилей
-        $cars = Car::where('status', 0)->get();
-
-        // получение свободных водителей
-        $drivers = Driver::where('status', 0)->get();
-
-        // получение списка поездок
-        $drivings = Driving::all();
-
-        echo "Drivings \r\n";
-        echo $drivings->toJson();
-
-        echo "\r\nDrivers \r\n";
-        echo $drivers->toJson();
-
-        echo "\r\nCars \r\n";
-        echo $cars->toJson();
-
-    }
 
     /**
-     * Добавление записи о начале поездки
+     * Добавление записи о начале поездки.
      *
      * @param Request $r POST-параметры: "car_id", "driver_id"
      *
      * @return \Illuminate\Http\JsonResponse
      */
 
-    public function drivingBegin(Request $r)
+    public function drivingCreate(Request $r)
     {
 
         // попытка получения модели автомобиля: иначе 404
@@ -53,7 +27,7 @@ class DrivingController extends Controller
 
         // проверка статуса автомобиля: 0 - свободен / 1 - занят
         if ($car->status === 1) {
-            return response()->json(['message' => 'Автомобиль уже занят'], 200);
+            return response()->json(['message' => 'Автомобиль уже используется'], 200);
         }
 
         // попытка получения моедли водителя: иначе 404
@@ -74,12 +48,12 @@ class DrivingController extends Controller
         $driver->update(['status' => 1]);
 
         // возвращает идентификатор поездки
-        return response()->json(['usage_number' => $driving->id], 201);
+        return response()->json(['driving_number' => $driving->id], 201);
 
     }
 
     /**
-     * Обновление статуса поездки
+     * Обновление статуса поездки.
      *
      * @param int $driving_id идентификатор поездки
      *
@@ -113,7 +87,8 @@ class DrivingController extends Controller
         $driving->update(['status' => 1]);
 
         // возвращает сообщение о завершении поездки
-        return response()->json(['message' => 'Поездка завершена'], 201);
+        return response()->json(['message' => 'Поездка завершена'], 202);
 
     }
+
 }
