@@ -11,5 +11,5 @@ class Driver extends Model
 
     protected $table = 'list_drivers';
 
-    protected $fillable = ['status'];
+    protected $fillable = ['name', 'status'];
 }

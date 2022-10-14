@@ -11,5 +11,5 @@ class Car extends Model
 
     protected $table = 'list_cars';
 
-    protected $fillable = ['status'];
+    protected $fillable = ['name', 'status'];
 }
