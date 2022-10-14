@@ -3,7 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\DrivingController;
+use App\Http\Controllers\ApiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,15 +16,12 @@ use App\Http\Controllers\DrivingController;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
-// получение имеющихся данных
-Route::get('/drivings', [DrivingController::class, 'getDrivings']);
+//Route::middleware('auth:api')->get('/user', function (Request $request) {
+//    return $request->user();
+//});
 
 // создание новой поездки
-Route::post('/driving/create', [DrivingController::class, 'drivingCreate']);
+Route::post('/create', [ApiController::class, 'create']);
 
 // завершение поездки
-Route::put('/driving/complete/{driving_id}', [DrivingController::class, 'drivingComplete']);
+Route::put('/complete/{driving_id}', [ApiController::class, 'complete']);
