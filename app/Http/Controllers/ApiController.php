@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\Validator;
+
 use App\Models\Car;
 use App\Models\Driver;
 use App\Models\Driving;
@@ -18,23 +20,28 @@ class ApiController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-
     public function create(Request $r)
     {
 
-        /**
-         * Validation code in processed ...
-         */
+        // валидация
+        $validator = Validator::make($r->all(), [
+            'car_id' => 'required|integer|exists:App\Models\Car,id',
+            'driver_id' => 'required|integer|exists:App\Models\Driver,id',
+        ]);
+        // проверка переданных параметров на валидность
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 400);
+        }
 
-        // попытка получения модели автомобиля: иначе 404
-        $car = Car::findOrFail($r->car_id);
-        // попытка получения моедли водителя: иначе 404
-        $driver = Driver::findOrFail($r->driver_id);
-
+        // получение модели автомобиля
+        $car = Car::find($r->car_id);
         // проверка статуса автомобиля: 0 - свободен / 1 - занят
         if ($car->status === 1) {
             return response()->json(['message' => 'Автомобиль уже используется'], 200);
         }
+
+        // получение моедли водителя
+        $driver = Driver::find($r->driver_id);
         // проверка статуса водителя: 0 - не управляет / 1 - управляет
         if ($driver->status === 1) {
             return response()->json(['message' => 'Водитель уже управляет автомобилем'], 200);
@@ -43,9 +50,9 @@ class ApiController extends Controller
         // создание записи поездки
         $driving = Driving::create($r->all());
 
-        // обновление статуса автомобиля: занят
+        // обновление статуса автомобиля: 1 - занят
         $car->update(['status' => 1]);
-        // обновление статуса водителя: управляет
+        // обновление статуса водителя: 1 - управляет
         $driver->update(['status' => 1]);
 
         // возвращает идентификатор поездки
@@ -54,23 +61,26 @@ class ApiController extends Controller
     }
 
     /**
-     * Обновление статуса поездки.
+     * Завершение поездки (изменение статуса поездки).
      *
-     * @param int $driving_id идентификатор поездки
+     * @param Request $r PUT-параметры: "driving_id"
      *
      * @return \Illuminate\Http\JsonResponse
      */
-
-    public function complete($driving_id)
+    public function complete(Request $r)
     {
 
-        /**
-         * Validation code in processed ...
-         */
+        // валидация
+        $validator = Validator::make($r->all(), [
+            'driving_id' => 'required|integer|exists:App\Models\Driving,id',
+        ]);
+        // проверка переданных параметров на валидность
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 400);
+        }
 
-        // попытка получения модели поездки: иначе 404
-        $driving = Driving::findOrFail($driving_id);
-
+        // получение модели поездки
+        $driving = Driving::find($r->driving_id);
         // проверка статуса поездки: 0 - продолжается / 1 - завершена
         if ($driving->status === 1) {
             return response()->json(['message' => 'Поездка больше недоступна для изменения'], 200);
@@ -81,11 +91,11 @@ class ApiController extends Controller
         // получение модели водителя, который участвует в поездке
         $driver = Driver::find($driving->driver_id);
 
-        // обновление статуса автомобиля: свободен
+        // обновление статуса автомобиля: 0 - свободен
         $car->update(['status' => 0]);
-        // обновление статуса водителя: не управляет
+        // обновление статуса водителя: 0 - не управляет
         $driver->update(['status' => 0]);
-        // обновление статуса поездки: завершена
+        // обновление статуса поездки: 1 - завершена
         $driving->update(['status' => 1]);
 
         // возвращает сообщение о завершении поездки

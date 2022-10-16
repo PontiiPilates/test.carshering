@@ -24,4 +24,4 @@ use App\Http\Controllers\ApiController;
 Route::post('/create', [ApiController::class, 'create']);
 
 // завершение поездки
-Route::put('/complete/{driving_id}', [ApiController::class, 'complete']);
+Route::put('/complete', [ApiController::class, 'complete']);
