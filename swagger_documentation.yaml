@@ -11,16 +11,19 @@ info:
       - В один момент времени один пользователь может управлять только одним автомобилем.
       - В один момент времени одним автомобилем может управлять только один пользователь.
         
-  version: 0.0.1
+  version: 0.0.2
 
 servers:
   - url: http://test.foundarium/api/driving
     description: Localhost
 
 paths:
+
   /create:
     post:
       summary: Создание поездки.
+      tags:
+        - API
       requestBody:
         required: true
         content:
@@ -35,7 +38,8 @@ paths:
               required:
                 - car_id
                 - driver_id
-      responses: 
+                
+      responses:
         '200':
           description: Не удалось создать поездку.
           content:
@@ -56,18 +60,31 @@ paths:
                   driving_number:
                     type: integer
                     example: 21
-                    
-  /complete/{driving_id}:
+        '400':
+          description: Данные невалидны.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: string
+                    example: {"driver_id": ["validation.exists"]}
+
+  /complete:
     put:
       summary: Завершение поездки.
+      tags:
+        - API
       parameters:
         - name: driving_id
-          in: path
+          in: query
           required: true
           description: Идентификатор созданной поездки.
           schema:
             type: integer
             minimum: 1
+            
       responses: 
         '200':
           description: Изменение поездки запрещено.
@@ -78,7 +95,7 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: Поездка уже завершена.
+                    example: Поездка больше недоступна для изменения.
         '202':
           description: Поездка успешно завершена.
           content:
@@ -89,3 +106,13 @@ paths:
                   message:
                     type: string
                     example: Поездка завершена.
+        '400':
+          description: Данные невалидны.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: string
+                    example: {"driving_id": ["validation.exists"]}
